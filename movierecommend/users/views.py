@@ -34,28 +34,57 @@ def check(request):
 #     pass
 
 
+# def showmessage(request):
+#     usermovieid = []
+#     rating = []
+#     usermovietitle = []
+#     data=Resulttable.objects.filter(userId=1001)
+#     for row in data:
+#         usermovieid.append(row.imdbId)
+#         rating.append(row.rating)
+#
+#     try:
+#         conn = get_conn()
+#         cur = conn.cursor()
+#         #Insertposter.objects.filter(userId=USERID).delete()
+#         for i in usermovieid:
+#             cur.execute('select * from moviegenre3 where imdbId = %s',i)
+#             rr = cur.fetchall()
+#             for imdbId,title,poster in rr:
+#                 usermovietitle.append(title)
+#                 print(title)
+#
+#
+#         # print(poster_result)
+#     finally:
+#         conn.close()
+#     return render(request, 'users/message.html', locals())
 def showmessage(request):
-    usermovieid = []
-    usermovietitle = []
-    data=Resulttable.objects.filter(userId=1001)
+    user_movies = []  # 存储电影ID、标题和评分
+    data = Resulttable.objects.filter(userId=1001)
+
+    # 首先获取用户的电影ID和评分
     for row in data:
-        usermovieid.append(row.imdbId)
+        user_movies.append({'imdbId': row.imdbId, 'rating': row.rating})
 
     try:
         conn = get_conn()
         cur = conn.cursor()
-        #Insertposter.objects.filter(userId=USERID).delete()
-        for i in usermovieid:
-            cur.execute('select * from moviegenre3 where imdbId = %s',i)
-            rr = cur.fetchall()
-            for imdbId,title,poster in rr:
-                usermovietitle.append(title)
-                print(title)
 
-        # print(poster_result)
+        for movie in user_movies:
+            imdbId = movie['imdbId']
+            cur.execute('select title from moviegenre3 where imdbId = %s', (imdbId,))
+            rr = cur.fetchone()  # 假设每个imdbId只对应一条记录
+            if rr:
+                movie['title'] = rr[0]  # 将电影标题添加到字典中
+            else:
+                movie['title'] = '未知标题'  # 如果找不到标题，则设置为未知
+
     finally:
         conn.close()
-    return render(request, 'users/message.html', locals())
+
+    # 将包含电影信息的列表传递到模板
+    return render(request, 'users/message.html', {'user_movies': user_movies})
 
 
 # USERID = 1002
@@ -63,8 +92,8 @@ def recommend1(request):
     USERID = int(request.GET["userIdd"]) + 1000
     Insertposter.objects.filter(userId=USERID).delete()
     #selectMysql()
-    read_mysql_to_csv('users/static/users_resulttable.csv',USERID)  #追加数据，提高速率
-    ratingfile = os.path.join('users/static', 'users_resulttable.csv')
+    read_mysql_to_csv('movierecommend/users/static/users_resulttable.csv',USERID)  #追加数据，提高速率
+    ratingfile = os.path.join('movierecommend/users/static', 'rrtotaltable.csv')
     usercf = UserBasedCF()
     userid = str(USERID)#得到了当前用户的id
     print(userid)
@@ -169,7 +198,7 @@ import codecs
 
 
 def get_conn():
-    conn = pymysql.connect(host='127.0.0.1', port=3307, user='root', passwd='admin', db='MovieData', charset='utf8')
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='admin', db='MovieData', charset='utf8')
     return conn
 
 def query_all(cur, sql, args):
@@ -181,7 +210,7 @@ def read_mysql_to_csv(filename,user):
         write = csv.writer(f, dialect='excel')
         conn = get_conn()
         cur = conn.cursor()
-        cur.execute('select * from users_resulttable')
+        cur.execute('select * from users_resulttable WHERE userId = 1001')
         #sql = ('select * from users_resulttable WHERE userId = 1001')
         rr = cur.fetchall()
         #results = query_all(cur=cur, sql=sql, args=None)

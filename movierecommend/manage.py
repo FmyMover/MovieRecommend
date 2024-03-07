@@ -2,6 +2,12 @@
 import os
 import sys
 
+print(os.sys.path)
+
+os.sys.path.insert(0, 'C:\\Users\\xfan\\CLionProjects\\MovieRecommend\\movierecommend')
+
+print(os.sys.path)
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_auth_example.settings")
     try:

@@ -1,4 +1,4 @@
-#!E:\GradProject\janice\django_auth_example\venv1\Scripts\python.exe
+
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==9.0.1','console_scripts','pip'
 __requires__ = 'pip==9.0.1'
 import re

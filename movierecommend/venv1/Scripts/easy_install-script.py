@@ -1,4 +1,4 @@
-#!E:\GradProject\janice\django_auth_example\venv1\Scripts\python.exe
+
 # EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==28.8.0','console_scripts','easy_install'
 __requires__ = 'setuptools==28.8.0'
 import re

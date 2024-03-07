@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=E:\GradProject\janice\django_auth_example\venv1"
+set "VIRTUAL_ENV=C:\Users\xfan\CLionProjects\MovieRecommend\movierecommend\venv1"
 
 if not defined PROMPT (
     set "PROMPT=$P$G"

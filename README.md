@@ -27,7 +27,7 @@
 ```Python
 python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver
+python movierecommend/manage.py runserver
 ```
 点击http://127.0.0.1:8000/ 即可查看注册登录以及评分页面。<br/>
 **注意登录后点击电影海报下面的星星对该电影评分，之后还要点击左上角的“提交评分”按钮才能将该评分数据存入mysql中，否则代码会报错。**
